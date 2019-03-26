@@ -45,7 +45,7 @@ router.post("/login", function(req, res, next) {
             req.session.userId = results[0].id;
 
             //Sending user data without the pasword column
-             res.redirect(301, '/current-users');
+             res.redirect(301, '/current-user');
         }
     );
 });
