@@ -5,11 +5,12 @@ var cors = require('cors');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
-
+var session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testRouter = require('./routes/test');
+var authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -31,9 +32,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Sessions for tracking login
+app.use(session({
+  secret: 'login',
+  resave: true,
+  saveUninitialized: false
+}));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/',testRouter);
+app.use('/',authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
