@@ -8,7 +8,8 @@ function requiresLogin(){
 }
 
 router.get('/session',(req,res,next)=>{
-    res.send(req.session.userId);
+    console.log(req.session.userId);
+    res.send(req.session);
 })
 
 /* GET users listing. */
