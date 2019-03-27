@@ -2,8 +2,14 @@ var express = require("express");
 var router = express.Router();
 var connection = require("../services/db");
 
-/* GET users listing. */
-router.post("/register", function(req, res, next) {
+//Middleware to log all request
+function logRequests(req,res,next){
+    console.log(req.body);
+    //Middleware code goes here
+    next();
+}
+// Register user 
+function registerUser(req, res, next) {
     var clientRequests = {
         email: req.body.email,
         password: req.body.password
@@ -14,12 +20,15 @@ router.post("/register", function(req, res, next) {
         clientRequests,
         (error, result, fields) => {
             if (error) throw error;
-          req.session.userId = result.insertId
+            req.session.userId = result.insertId
+            req.session.isAuthenticated = true
             res.redirect(301, "/current-user");
         }
     );
     // console.log(query.sql);
-});
+}
+/* GET users listing. */
+router.post("/register",logRequests, registerUser);
 
 /* GET users listing. */
 router.get("/", function(req, res, next) {

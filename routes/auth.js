@@ -3,21 +3,20 @@ var router = express.Router();
 var connection = require("../services/db");
 
 //Middleware to catch auth
-function requiresLogin(){
-
+function requiresLogin(req,res,next){
+    if(!req.session.userId){
+        return res.status(401).send("Please login to view this page");
+    }
+    next()
 }
 
-router.get('/session',(req,res,next)=>{
-    console.log(req.session.userId);
+router.get('/session',requiresLogin,(req,res,next)=>{
     res.send(req.session);
 })
 
 /* GET users listing. */
-router.get("/current-user", function (req, res, next) {
+router.get("/current-user",requiresLogin, function (req, res, next) {
     var currentUser = req.session.userId;
-    if(!currentUser){
-        return res.status(401).send("Please login to view this page")
-    } 
     connection.query(
         "SELECT * FROM users WHERE id = ?",
         currentUser,
