@@ -4,6 +4,7 @@ var connection = require("../services/db");
 
 //Middleware to log all request
 function logRequests(req,res,next){
+    // req.method => this gives the current method that the request was sent on
     console.log(req.body);
     //Middleware code goes here
     next();
